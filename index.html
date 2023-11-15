@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>WebSocket Client</h1>
+    <button id="connect">Connect to WebSocket</button>
+    <div id="status">Not connected</div>
+    <div id="received"></div>
+
+    <script type="text/javascript">
+        document.getElementById('connect').addEventListener('click', function() {
+            var ws = new WebSocket('wss://rpc.spilin.com');
+
+            ws.onopen = function() {
+                document.getElementById('status').innerHTML = 'Connected!';
+                // Send a message to the server
+                ws.send('Hello, server!');
+            };
+
+            ws.onmessage = function(event) {
+                var received_msg = event.data;
+                document.getElementById('received').innerHTML += '<p>Message: ' + received_msg + '</p>';
+            };
+
+            ws.onclose = function() {
+                // websocket is closed.
+                document.getElementById('status').innerHTML = 'Disconnected.';
+            };
+
+            ws.onerror = function (error) {
+                console.log('WebSocket Error: ' + error);
+                document.getElementById('status').innerHTML = 'Error occurred.';
+            };
+        });
+    </script>
+</body>
+</html>
